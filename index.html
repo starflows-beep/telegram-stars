@@ -97,11 +97,24 @@ footer{text-align:center;padding:30px;color:#78849a;font-size:13px}
     <div class="muted">500 звёзд</div>
    </div>
   </div>
+<label>Введи количество звёзд</label>
+<input
+  id="customAmount"
+  type="number"
+  min="1"
+  max="10000"
+  placeholder="Например, 350"
+  oninput="customChoose()"
+>
+  <<div class="total">
+  <span>Количество:</span>
+  <strong id="count">50 ⭐</strong>
+</div>
 
-  <div class="total">
-   <span>Выбрано:</span>
-   <strong id="count">50 ⭐</strong>
-  </div>
+<div class="total">
+  <span>К оплате:</span>
+  <strong id="price">82.50 ₽</strong>
+</div>
 
   <button onclick="buy()">Перейти к Fragment →</button>
   <div class="note">
