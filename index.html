@@ -114,23 +114,66 @@ footer{text-align:center;padding:30px;color:#78849a;font-size:13px}
 
 <footer>
  StarFlow © 2026 · Telegram Stars
-</footer>
-
+</
 <script>
-let selected=50;
+let selected = 50;
+let customPrice = null;
 
-function choose(amount,element){
- selected=amount;
- document.querySelectorAll('.package').forEach(
-  p=>p.classList.remove('active')
- );
- element.classList.add('active');
- document.getElementById('count').textContent=amount+' ⭐';
+const prices = {
+  50: 82.50,
+  100: 159.50,
+  250: 385,
+  500: 759,
+  1000: 1485,
+  2500: 3630
+};
+
+function choose(amount, element) {
+  selected = amount;
+  customPrice = null;
+
+  document.getElementById('customAmount').value = '';
+
+  document.querySelectorAll('.package').forEach(p =>
+    p.classList.remove('active')
+  );
+
+  element.classList.add('active');
+  document.getElementById('count').textContent = amount + ' ⭐';
+  updatePrice();
 }
 
-function buy(){
- window.open('https://fragment.com/stars','_blank');
+function customChoose() {
+  const amount = Number(document.getElementById('customAmount').value);
+
+  document.querySelectorAll('.package').forEach(p =>
+    p.classList.remove('active')
+  );
+
+  if (!Number.isInteger(amount) || amount < 1 || amount > 10000) {
+    customPrice = null;
+    document.getElementById('count').textContent = '—';
+    document.getElementById('price').textContent = '— ₽';
+    return;
+  }
+
+  selected = amount;
+  customPrice = amount * 1.595;
+
+  document.getElementById('count').textContent = amount + ' ⭐';
+  updatePrice();
 }
+
+function updatePrice() {
+  const price = customPrice ?? prices[selected];
+  document.getElementById('price').textContent = price.toFixed(2) + ' ₽';
+}
+
+function buy() {
+  window.open('https://fragment.com/stars', '_blank');
+}
+
+updatePrice();
 </script>
 </body>
 </html>
