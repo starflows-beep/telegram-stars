@@ -116,11 +116,7 @@ footer{text-align:center;padding:30px;color:#78849a;font-size:13px}
   <strong id="price">82.50 ₽</strong>
 </div>
 
-  <button onclick="buy()">Перейти к Fragment →</button>
-  <div class="note">
-   Покупка осуществляется на официальной площадке Fragment.
-   Этот сайт пока не принимает платежи и не оформляет заказы.
-   Никнейм не отправляется автоматически.
+ <button onclick="buy()">Оплатить через Т-Банк →</button>
   </div>
  </section>
 </main>
@@ -183,10 +179,57 @@ function updatePrice() {
 }
 
 function buy() {
+  const username = document.getElementById('username').value.trim();
+
+  if (!/^@?[a-zA-Z0-9_]{5,32}$/.test(username)) {
+    alert('Введи правильный Telegram username');
+    return;
+  }
+
+  const price = customPrice ?? prices[selected] ?? selected * 1.595;
+
+  document.getElementById('orderInfo').textContent =
+    'Заказ для ' + (username.startsWith('@') ? username : '@' + username)
+    + ' · ' + selected + ' ⭐';
+
+  document.getElementById('modalPrice').textContent =
+    price.toFixed(2) + ' ₽';
+
+  document.getElementById('paymentStatus').textContent = '';
+
+  document.getElementById('paymentModal').style.display = 'block';
+}
+
+function markPaid() {
+  document.getElementById('paymentStatus').textContent =
+    'Заказ ожидает проверки оплаты';
+}
   window.open('https://fragment.com/stars', '_blank');
 }
 
 updatePrice();
 </script>
+<div id="paymentModal" style="display:none;position:fixed;inset:0;background:#090d18ee;z-index:10;overflow:auto;padding:20px;">
+  <div style="max-width:420px;margin:40px auto;background:#121a2b;border:1px solid #34415d;border-radius:20px;padding:24px;text-align:center;color:white;">
+    <h2>Оплата StarFlow ⭐</h2>
+    <p id="orderInfo"></p>
+
+    <img src="payment-qr.jpg"
+         alt="QR-код Т-Банка"
+         style="width:100%;max-width:280px;border-radius:12px;background:white;padding:5px;">
+
+    <h2 id="modalPrice"></h2>
+    <p>Отсканируй QR-код приложением банка.</p>
+
+    <button onclick="markPaid()">Я оплатил</button>
+
+    <p id="paymentStatus" style="color:#ffd27a;"></p>
+
+    <button onclick="document.getElementById('paymentModal').style.display='none'"
+            style="background:#26334d;">
+      Закрыть
+    </button>
+  </div>
+</div>
 </body>
 </html>
